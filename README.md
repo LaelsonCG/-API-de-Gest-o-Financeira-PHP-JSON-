@@ -1,52 +1,99 @@
 ### **📌 API de Gestão Financeira (PHP + JSON)**
 Uma API simples em PHP para gerenciar revendedores, produtos e clientes usando um arquivo JSON.
 
-## 🚀 **Requisitos**
-- PHP 7.4+
-- Servidor local (Apache/Nginx) ou `php -S localhost:8000`
-- Arquivo `dados.json` na mesma pasta que `api.php`
+### **📌 Exemplos de Requisição e Retorno**  
 
 ---
 
-## 📁 **Estrutura do Projeto**
-```
-/projeto
-  ├── api.php
-  ├── dados.json
-  ├── README.md
-```
-
----
-
-## ⚙ **Configuração do Banco de Dados**
-A API usa um arquivo `dados.json` para armazenar as informações.
-
-**Estrutura do `dados.json`**:
+#### **1️⃣ Login**
+📌 **Requisição (POST `/api.php?acao=login`)**
 ```json
 {
-  "admin": {
-    "usuario": "admin",
-    "senha": "senha_admin"
-  },
-  "revendedores": [],
-  "produtos": [],
-  "clientes": []
+  "usuario": "admin",
+  "senha": "senha_admin"
+}
+```
+📌 **Retorno**
+```json
+{
+  "token": "abcdef123456"
 }
 ```
 
-Se o arquivo não existir, crie um novo e copie essa estrutura.
+---
+
+#### **2️⃣ Cadastrar Revendedor (POST `/api.php`)**
+📌 **Requisição**
+```json
+{
+  "token": "abcdef123456",
+  "acao": "add_revendedor",
+  "nome": "Revendedor X",
+  "usuario": "revendedorx",
+  "senha": "senha123"
+}
+```
+📌 **Retorno**
+```json
+{
+  "status": "sucesso"
+}
+```
 
 ---
 
-## 🌍 **Rotas Disponíveis**
-### **🔹 GET - Obter Informações**
-| Endpoint | Parâmetros | Descrição |
-|----------|-----------|-----------|
-| `GET /api.php?tipo=cliente&usuario={usuario}` | `usuario` (opcional) | Retorna os dados de um cliente específico. |
-| `GET /api.php?tipo=revendedor` | - | Retorna a lista de revendedores cadastrados. |
-| `GET /api.php?tipo=produtos` | - | Retorna a lista de produtos cadastrados. |
+#### **3️⃣ Cadastrar Produto (POST `/api.php`)**
+📌 **Requisição**
+```json
+{
+  "token": "abcdef123456",
+  "acao": "add_produto",
+  "nome": "Produto Y",
+  "valor": 200.00
+}
+```
+📌 **Retorno**
+```json
+{
+  "status": "sucesso"
+}
+```
 
-**Exemplo de Resposta (Cliente)**:
+---
+
+#### **4️⃣ Cadastrar Cliente (POST `/api.php`)**
+📌 **Requisição**
+```json
+{
+  "token": "abcdef123456",
+  "acao": "add_cliente",
+  "nome": "Cliente Y",
+  "usuario": "clienteY",
+  "senha": "senhaY",
+  "produto": "Produto X",
+  "data_contratacao": "2025-03-17",
+  "vencimento": "2026-03-17",
+  "revendedor": "revendedorx"
+}
+```
+📌 **Retorno**
+```json
+{
+  "status": "sucesso"
+}
+```
+
+**⚠ Se o usuário logado for revendedor, o campo `revendedor` será preenchido automaticamente.**
+
+---
+
+#### **5️⃣ Obter Dados (GET `/api.php`)**
+📌 **Requisição**  
+**Obter um cliente específico:**  
+```
+GET /api.php?tipo=cliente&usuario=cliente1
+```
+📌 **Retorno**
 ```json
 {
   "nome": "Cliente 1",
@@ -58,111 +105,71 @@ Se o arquivo não existir, crie um novo e copie essa estrutura.
 }
 ```
 
+📌 **Requisição**  
+**Obter lista de revendedores:**  
+```
+GET /api.php?tipo=revendedor
+```
+📌 **Retorno**
+```json
+[
+  {
+    "nome": "Revendedor 1",
+    "usuario": "revendedor1"
+  },
+  {
+    "nome": "Revendedor 2",
+    "usuario": "revendedor2"
+  }
+]
+```
+
+📌 **Requisição**  
+**Obter lista de produtos:**  
+```
+GET /api.php?tipo=produtos
+```
+📌 **Retorno**
+```json
+[
+  {
+    "nome": "Produto A",
+    "valor": 99.99
+  },
+  {
+    "nome": "Produto B",
+    "valor": 199.99
+  }
+]
+```
+
 ---
 
-### **🔹 POST - Cadastrar Dados**
-- **Formato:** Enviar `application/json` no corpo da requisição.
-
-#### **1️⃣ Cadastrar um Revendedor**
-| Campo | Tipo | Obrigatório | Descrição |
-|-------|------|------------|-----------|
-| `acao` | `string` | ✅ | Deve ser `"add_revendedor"`. |
-| `nome` | `string` | ✅ | Nome do revendedor. |
-| `usuario` | `string` | ✅ | Usuário/email do revendedor. |
-| `senha` | `string` | ✅ | Senha do revendedor. |
-
-📌 **Exemplo de JSON para cadastrar um revendedor:**
+#### **⚠ Erros Possíveis**
+📌 **Requisição Inválida**
 ```json
 {
-  "acao": "add_revendedor",
-  "nome": "Revendedor X",
-  "usuario": "revendedorx",
-  "senha": "senha123"
+  "erro": "Ação inválida"
 }
 ```
-
----
-
-#### **2️⃣ Cadastrar um Produto**
-| Campo | Tipo | Obrigatório | Descrição |
-|-------|------|------------|-----------|
-| `acao` | `string` | ✅ | Deve ser `"add_produto"`. |
-| `nome` | `string` | ✅ | Nome do produto. |
-| `valor` | `float` | ✅ | Valor do produto. |
-
-📌 **Exemplo de JSON para cadastrar um produto:**
+📌 **Usuário não autenticado**
 ```json
 {
-  "acao": "add_produto",
-  "nome": "Produto Y",
-  "valor": 200.00
+  "erro": "Acesso negado"
 }
 ```
-
----
-
-#### **3️⃣ Cadastrar um Cliente**
-| Campo | Tipo | Obrigatório | Descrição |
-|-------|------|------------|-----------|
-| `acao` | `string` | ✅ | Deve ser `"add_cliente"`. |
-| `nome` | `string` | ✅ | Nome do cliente. |
-| `usuario` | `string` | ✅ | Usuário/email do cliente. |
-| `senha` | `string` | ✅ | Senha do cliente. |
-| `produto` | `string` | ✅ | Produto contratado. |
-| `data_contratacao` | `string` | ✅ | Data de contratação (YYYY-MM-DD). |
-| `vencimento` | `string` | ✅ | Data de vencimento (YYYY-MM-DD). |
-| `revendedor` | `string` | ✅ | Usuário do revendedor responsável. |
-
-📌 **Exemplo de JSON para cadastrar um cliente:**
+📌 **Cliente não encontrado**
 ```json
 {
-  "acao": "add_cliente",
-  "nome": "Cliente Y",
-  "usuario": "clienteY",
-  "senha": "senhaY",
-  "produto": "Produto X",
-  "data_contratacao": "2025-03-17",
-  "vencimento": "2026-03-17",
-  "revendedor": "revendedorx"
+  "erro": "Cliente não encontrado"
 }
 ```
-
----
-
-### **📡 Testando a API**
-#### **🔹 Usando cURL**
-```sh
-curl -X POST http://localhost/api.php \
--H "Content-Type: application/json" \
--d '{"acao": "add_revendedor", "nome": "Revendedor Z", "usuario": "revendedorz", "senha": "senha123"}'
+📌 **Permissão Negada**
+```json
+{
+  "erro": "Permissão negada"
+}
 ```
-
-#### **🔹 Usando Postman**
-1. Selecione `POST`.
-2. Digite `http://localhost/api.php`.
-3. Vá em **Body** > **raw**, selecione **JSON**, e cole o JSON de exemplo.
-4. Clique em **Send**.
-
----
-
-## ⚠ **Tratamento de Erros**
-A API retorna mensagens em JSON para indicar erros:
-| Código | Mensagem |
-|--------|---------|
-| `{"erro": "Cliente não encontrado"}` | O usuário não existe. |
-| `{"erro": "Parâmetro 'tipo' inválido"}` | Parâmetro inválido em requisições GET. |
-| `{"erro": "Ação inválida"}` | Ação inválida em requisições POST. |
-| `{"erro": "Método inválido"}` | Método HTTP não permitido. |
-
----
-
-## 🎯 **To-Do**
-- [ ] Implementar autenticação com `Bearer Token`
-- [ ] Adicionar edição e remoção de registros
-- [ ] Criar um dashboard para visualizar os dados
-
----
-
 ## 🏆 **Licença**
 Este projeto é de código aberto sob a licença MIT.
 

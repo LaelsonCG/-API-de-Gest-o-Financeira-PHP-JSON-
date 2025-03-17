@@ -1,0 +1,48 @@
+{
+  "admin": {
+    "usuario": "admin",
+    "senha": "12345"
+  },
+  "revendedores": [
+    {
+      "nome": "Revendedor 1",
+      "usuario": "revendedor1",
+      "senha": "12345"
+    },
+    {
+      "nome": "Revendedor 2",
+      "usuario": "revendedor2",
+      "senha": "senha_revendedor2"
+    }
+  ],
+  "produtos": [
+    {
+      "nome": "VPS 2/2",
+      "valor": 64.99
+    },
+    {
+      "nome": "VPS 4/2",
+      "valor": 119.99
+    }
+  ],
+  "clientes": [
+    {
+      "nome": "Cliente 1",
+      "usuario": "cliente1",
+      "senha": "senha_cliente1",
+      "produto_contratado": "Produto A",
+      "data_contratacao": "2023-10-27",
+      "vencimento": "2024-10-27",
+      "revendedor": "revendedor1"
+    },
+    {
+      "nome": "Cliente 2",
+      "usuario": "cliente2",
+      "senha": "senha_cliente2",
+      "produto_contratado": "Produto B",
+      "data_contratacao": "2023-10-27",
+      "vencimento": "2024-10-27",
+      "revendedor": "revendedor2"
+    }
+  ]
+}
